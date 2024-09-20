@@ -6,6 +6,6 @@
 
         public int Age { get; set; }
 
-        public int MyProperty { get; set; }
+        public IFormFile Photo { get; set; }
     }
 }
