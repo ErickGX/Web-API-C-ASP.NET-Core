@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApi.Model;
+using WebApi.Services;
 using WebApi.ViewModel;
 
 namespace WebApi.Controllers
@@ -10,36 +11,26 @@ namespace WebApi.Controllers
     {
 
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IFileStorageService _fileStorageService;
 
-        public EmployeeController(IEmployeeRepository employeeRepository)
+        public EmployeeController(IEmployeeRepository employeeRepository, IFileStorageService fileStorageService)
         {
+
+            _fileStorageService = fileStorageService ?? throw new ArgumentNullException(nameof(employeeRepository));
             _employeeRepository = employeeRepository ?? throw new ArgumentNullException(nameof(employeeRepository));
+            _fileStorageService = fileStorageService;
         }
 
 
         [HttpPost]
         public IActionResult Add([FromForm] EmployeeViewModel employeeView)
-                {
-                    if (employeeView.Photo == null || employeeView.Photo.Length == 0)
-                    {
-                        return BadRequest("Nenhuma foto foi enviada.");
-                    }
+        {
 
-                    // Gera um nome único para o arquivo usando um GUID
-                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(employeeView.Photo.FileName);
-                    var filePath = Path.Combine("Storage", fileName);
 
                     try
                     {
-                        // Cria a pasta Storage se ela não existir
-                        if (!Directory.Exists("Storage"))
-                        {
-                            Directory.CreateDirectory("Storage");
-                        }
-
-                        // Salva o arquivo na pasta Storage
-                        using Stream fileStream = new FileStream(filePath, FileMode.Create);
-                        employeeView.Photo.CopyTo(fileStream);
+                        // Salva a foto e retorna o caminho
+                        var filePath = _fileStorageService.SaveFile(employeeView.Photo, "Storage");
 
                         // Cria um novo Employee e salva no banco de dados
                         var employee = new Employee(employeeView.Name, employeeView.Age, filePath);
@@ -53,7 +44,7 @@ namespace WebApi.Controllers
                         // Se algo der errado, retorna uma resposta com a mensagem de erro
                         return StatusCode(500, $"Erro ao salvar o arquivo: {ex.Message}");
                     }
-                }
+        }
 
 
 
@@ -113,12 +104,12 @@ namespace WebApi.Controllers
 
             if (employee == null)
             {
-                return NotFound(); // Retorna 404 se o funcionário não for encontrado
+                return NotFound(); //  Retorna 404 se o funcionário não for encontrado
             }
 
             employee = _employeeRepository.UpdateAgeName(id, name,age);
 
-            return Ok(employee);
+            return Ok(employee); // Retorna o objeto atualizado ao cliente
         }
 
 

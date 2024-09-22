@@ -9,7 +9,7 @@ namespace WebApi.Infraestrutura
         private readonly ConnectionContext _context =  new ConnectionContext();
 
 
-        //Metodo Para cadastrar um usuario com Foto e armazenar a imagem na pasta Storage e dar um nome unico ao arquivo
+        //Metodo Para cadastrar um usuario com Foto e armazenar a imagem na pasta Storage
         public void Add(Employee employee)
         {
             _context.Employees.Add(employee);

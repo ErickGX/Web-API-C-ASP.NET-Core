@@ -1,5 +1,6 @@
 using WebApi.Infraestrutura;
 using WebApi.Model;
+using WebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,8 @@ builder.Services.AddSwaggerGen();
 
 
 builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
+// Adiciona serviços ao container
+builder.Services.AddTransient<IFileStorageService, FileStorageService>();
 
 var app = builder.Build();
 
