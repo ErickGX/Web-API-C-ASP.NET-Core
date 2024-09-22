@@ -18,10 +18,28 @@ namespace WebApi.Model
             this.name = name;
             this.age = age;
             this.photo = photo;
-
-
-
         }
+
+
+
+        // Construtor personalizado que aceita apenas name e age
+        public Employee(string name, int age)
+        {
+            this.name = name;
+            this.age = age;
+        }
+
+        // Métodos de atualização para update parcial(HTTP -> PUTCH)
+        public void UpdateName(string name)
+        {
+            this.name = name;
+        }
+
+        public void UpdateAge(int age)
+        {
+            this.age = age;
+        }
+
 
     }
 }
