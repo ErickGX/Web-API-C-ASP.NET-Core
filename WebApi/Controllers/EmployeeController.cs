@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebApi.Model;
 using WebApi.Services;
 using WebApi.ViewModel;
@@ -21,7 +22,7 @@ namespace WebApi.Controllers
             _fileStorageService = fileStorageService;
         }
 
-
+        [Authorize]
         [HttpPost]
         public IActionResult Add([FromForm] EmployeeViewModel employeeView)
         {
@@ -47,7 +48,7 @@ namespace WebApi.Controllers
         }
 
 
-
+        [Authorize]
         [HttpPost]
         [Route("{id}/download")]
         public IActionResult DownloadPhoto(int id)
@@ -66,7 +67,7 @@ namespace WebApi.Controllers
         }
 
 
-
+        [Authorize]
         [HttpGet]
         public IActionResult Get() 
         {
@@ -76,7 +77,7 @@ namespace WebApi.Controllers
 
         }
 
-
+        [Authorize]
         [HttpDelete]
         [Route("{id}")]
         public IActionResult Delete(int id) {
@@ -94,7 +95,7 @@ namespace WebApi.Controllers
             return NoContent();
         }
 
-
+        [Authorize]
         [HttpPatch]
         [Route("{id}/age/name")]
         public IActionResult UpdateNameAge(int id, string name, int age) {

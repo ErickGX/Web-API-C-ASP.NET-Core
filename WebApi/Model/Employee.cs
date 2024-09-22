@@ -29,6 +29,10 @@ namespace WebApi.Model
             this.age = age;
         }
 
+        public Employee()
+        {
+        }
+
         // Métodos de atualização para update parcial(HTTP -> PUTCH)
         public void UpdateName(string name)
         {
