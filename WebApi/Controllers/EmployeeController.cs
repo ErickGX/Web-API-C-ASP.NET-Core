@@ -22,6 +22,10 @@ namespace WebApi.Controllers
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
+
+
+
+        //Rota para cadastrar usuario com foto no banco de dados
         [Authorize]
         [HttpPost]
         public IActionResult Add([FromForm] EmployeeViewModel employeeView)
@@ -48,6 +52,8 @@ namespace WebApi.Controllers
         }
 
 
+
+        //Rota para acessar e visualizar a foto do perfil do usuario com base no seu ID
         [Authorize]
         [HttpPost]
         [Route("{id}/download")]
@@ -67,6 +73,8 @@ namespace WebApi.Controllers
         }
 
 
+
+        //Retorna todos os registros do banco de dados
         [Authorize]
         [HttpGet]
         public IActionResult Get() 
@@ -87,6 +95,7 @@ namespace WebApi.Controllers
                 return BadRequest("Page number e page quantity tem que ser maiores que Zero.");
             }
 
+
             _logger.Log(LogLevel.Error, "Erro na consulta");
 
             var employees = _employeeRepository.Get(pageNumber, pageQuantity);
@@ -97,6 +106,8 @@ namespace WebApi.Controllers
 
 
 
+
+        //Rota para deletar usuario com base no ID
         [Authorize]
         [HttpDelete]
         [Route("{id}")]
@@ -115,6 +126,8 @@ namespace WebApi.Controllers
             return NoContent();
         }
 
+
+        //Rota para atualizar apenas alguns parametros do usuario utilizando Patch
         [Authorize]
         [HttpPatch]
         [Route("{id}/age/name")]

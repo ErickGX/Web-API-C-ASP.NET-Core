@@ -75,22 +75,18 @@ builder.Services.AddAuthentication(x =>
 
 
 
-
-
-
-
-
-
-
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
-{
+{   //Caso dê algum erro no ambiente de desenvolvimento , redireciona esta rota de erro detalhada
+    app.UseExceptionHandler("/error-development");
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+else
+{
+    app.UseExceptionHandler("/error");
 }
 
 app.UseHttpsRedirection();
