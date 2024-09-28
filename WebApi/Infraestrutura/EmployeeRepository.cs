@@ -23,6 +23,12 @@ namespace WebApi.Infraestrutura
             return _context.Employees.ToList();
         }
 
+        //Retorna uma lista paginada de usuarios
+        public List<Employee> Get(int pageNumber, int pageQuantity)
+        {
+            return _context.Employees.Skip((pageNumber - 1) * pageQuantity).Take(pageQuantity).ToList();
+        }
+
         //Retorna um usuario em especifico pelo ID informado
         public Employee Get(int id)
         {

@@ -13,13 +13,13 @@ namespace WebApi.Controllers
 
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IFileStorageService _fileStorageService;
+        private readonly ILogger<EmployeeController> _logger;
 
-        public EmployeeController(IEmployeeRepository employeeRepository, IFileStorageService fileStorageService)
+        public EmployeeController(IEmployeeRepository employeeRepository, IFileStorageService fileStorageService, ILogger<EmployeeController> logger)
         {
-
-            _fileStorageService = fileStorageService ?? throw new ArgumentNullException(nameof(employeeRepository));
             _employeeRepository = employeeRepository ?? throw new ArgumentNullException(nameof(employeeRepository));
-            _fileStorageService = fileStorageService;
+            _fileStorageService = fileStorageService ?? throw new ArgumentNullException(nameof(fileStorageService));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [Authorize]
@@ -76,6 +76,26 @@ namespace WebApi.Controllers
             return Ok(employees);
 
         }
+
+
+        //rota do get Paginado
+        [HttpGet("paginated/{pageNumber}/{pageQuantity}")]
+        public IActionResult Get(int pageNumber, int pageQuantity) 
+        {
+            if (pageNumber <= 0 || pageQuantity <= 0)
+            {
+                return BadRequest("Page number e page quantity tem que ser maiores que Zero.");
+            }
+
+            _logger.Log(LogLevel.Error, "Erro na consulta");
+
+            var employees = _employeeRepository.Get(pageNumber, pageQuantity);
+
+            _logger.LogInformation("teste");
+            return Ok(employees);
+        }
+
+
 
         [Authorize]
         [HttpDelete]

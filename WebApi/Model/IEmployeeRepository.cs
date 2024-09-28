@@ -5,6 +5,8 @@
 
         void Add(Employee employee);
 
+            List<Employee> Get(int pageNumber, int pageQuantity);
+
             List<Employee> Get();
 
             Employee Get(int id);
