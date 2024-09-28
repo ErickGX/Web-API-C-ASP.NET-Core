@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Model;
+using WebApi.Domain.DTOs;
+using WebApi.Domain.Model;
 
-namespace WebApi.Infraestrutura
+namespace WebApi.Infraestrutura.Repositories
 {
     public class EmployeeRepository : IEmployeeRepository
     {
-        private readonly ConnectionContext _context =  new ConnectionContext();
+        private readonly ConnectionContext _context = new ConnectionContext();
 
 
         //Metodo Para cadastrar um usuario com Foto e armazenar a imagem na pasta Storage
@@ -23,10 +24,20 @@ namespace WebApi.Infraestrutura
             return _context.Employees.ToList();
         }
 
-        //Retorna uma lista paginada de usuarios
-        public List<Employee> Get(int pageNumber, int pageQuantity)
+        //Retorna uma lista paginada de usuarios - Retorna o DTO e nao a entidade em Si sem o atributo age (dado "sensivel")
+        public List<EmployeeDTO> Get(int pageNumber, int pageQuantity)
         {
-            return _context.Employees.Skip((pageNumber - 1) * pageQuantity).Take(pageQuantity).ToList();
+            return _context.Employees.Skip((pageNumber - 1) * pageQuantity)
+                .Take(pageQuantity)
+                .Select( b =>
+                new EmployeeDTO()
+                { 
+                    Id = b.id,
+                    nameEmployee = b.name,
+                    Photo = b.photo
+
+                })  
+                .ToList();
         }
 
         //Retorna um usuario em especifico pelo ID informado
@@ -49,10 +60,10 @@ namespace WebApi.Infraestrutura
                 var photoPath = employee.photo;
                 _context.Employees.Remove(employee); // Remove a entidade
 
-                if (!string.IsNullOrEmpty(photoPath) && System.IO.File.Exists(photoPath))
+                if (!string.IsNullOrEmpty(photoPath) && File.Exists(photoPath))
                 {
                     // Exclui a foto do sistema de arquivos
-                    System.IO.File.Delete(photoPath);
+                    File.Delete(photoPath);
                 }
                 _context.SaveChanges(); // Salva as mudanças no banco de dados
             }
@@ -86,9 +97,9 @@ namespace WebApi.Infraestrutura
             }
 
             return employee;
-            
+
         }
 
-    
+
     }
 }

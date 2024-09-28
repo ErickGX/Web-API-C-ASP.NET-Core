@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Model;
-using WebApi.Services;
-using WebApi.ViewModel;
+using WebApi.Application.Services;
+using WebApi.Application.ViewModel;
+using WebApi.Domain.Model;
 
 namespace WebApi.Controllers
 {
@@ -86,7 +86,8 @@ namespace WebApi.Controllers
         }
 
 
-        //rota do get Paginado
+        //rota do get com Paginação de dados
+        [Authorize]
         [HttpGet("paginated/{pageNumber}/{pageQuantity}")]
         public IActionResult Get(int pageNumber, int pageQuantity) 
         {

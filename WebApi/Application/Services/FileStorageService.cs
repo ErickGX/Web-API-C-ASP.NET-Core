@@ -1,5 +1,4 @@
-﻿
-namespace WebApi.Services
+﻿namespace WebApi.Application.Services
 {
     public class FileStorageService : IFileStorageService
     {
